@@ -128,9 +128,9 @@ def answer_callback(call):
             questioner = players[0]
 
     editedInline = types.InlineKeyboardMarkup()
-    btn1 = types.InlineKeyboardButton(questions[questioner][1] + u'\u2714')
-    btn2 = types.InlineKeyboardButton(questions[questioner][2] + u'\u274C')
-    btn3 = types.InlineKeyboardButton(questions[questioner][3] + u'\u274C')
+    btn1 = types.InlineKeyboardButton(u'\u2714' + " " + questions[questioner][1], callback_data="133")
+    btn2 = types.InlineKeyboardButton(u'\u274C' + " " + questions[questioner][2], callback_data="133")
+    btn3 = types.InlineKeyboardButton(u'\u274C' + " " + questions[questioner][3], callback_data="133")
     editedInline.row(btn1)
     editedInline.row(btn2)
     editedInline.row(btn3)
