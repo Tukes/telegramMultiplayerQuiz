@@ -118,7 +118,6 @@ def question_handler(message):
 
 @bot.callback_query_handler(func=lambda call: call.data != "game start")
 def answer_callback(call):
-    global emptyInline
     global questions
     global usersPlaying
 
@@ -127,20 +126,29 @@ def answer_callback(call):
     for players in usersPlaying:
         if answerer in players:
             questioner = players[0]
+
+    editedInline = types.InlineKeyboardMarkup()
+    btn1 = types.InlineKeyboardButton(questions[questioner][1] + u'\u2714')
+    btn2 = types.InlineKeyboardButton(questions[questioner][2] + u'\u274C')
+    btn3 = types.InlineKeyboardButton(questions[questioner][3] + u'\u274C')
+    editedInline.row(btn1)
+    editedInline.row(btn2)
+    editedInline.row(btn3)
     bot.edit_message_reply_markup(chat_id=answerer,
                                   message_id=call.message.message_id,
-                                  reply_markup=emptyInline)
+                                  reply_markup=editedInline)
 
     playAgainMarkup = types.InlineKeyboardMarkup()
     playAgainBtn = types.InlineKeyboardButton("Сыграть снова", callback_data="game start")
     playAgainMarkup.row(playAgainBtn)
     if call.data == questions[questioner][1]:
-        bot.send_message(answerer, 'Вы ответили:\n' + call.data, reply_markup=playAgainMarkup)
-        bot.send_message(answerer, 'Ответ верный!')
+        bot.send_message(answerer, 'Вы ответили:\n' + call.data)
+        bot.send_message(answerer, 'Ответ верный!', reply_markup=playAgainMarkup)
         bot.send_message(questioner, "Отвечающий ответил верно!", reply_markup=playAgainMarkup)
     else:
-        bot.send_message(answerer, 'Вы ответили:\n' + call.data, reply_markup=playAgainMarkup)
-        bot.send_message(answerer, 'Ответ неверный!\nВерный ответ:\n' + questions[questioner][1])
+        bot.send_message(answerer, 'Вы ответили:\n' + call.data)
+        bot.send_message(answerer, 'Ответ неверный!\nВерный ответ:\n' + questions[questioner][1],
+                         reply_markup=playAgainMarkup)
         bot.send_message(questioner, "Отвечающий ответил неверно!\nВыбранный им ответ:\n" + call.data,
                          reply_markup=playAgainMarkup)
 
